@@ -14,23 +14,50 @@ __     __      __     _ _                                 _    _
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Timer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     @import url('http://fonts.googleapis.com/css?family=Squada+One|Syncopate');
-    html, body {margin: 0; padding: 0; height: 100vh;}
-    input {font-family: 'Squada One', cursive; font-size: 35vmax; border: 0; color: #f15b47; outline: none; width: 40vmax; text-align: center }
-    input:hover {background: #ececec; }
+    html, body {margin: 0; padding: 0;}
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none; margin: 0; }
+    input {font-family: 'Squada One', cursive; font-size: 35em; border: 0; color: #f15b47; outline: none; width: 600px; text-align: center }
     ul {list-style-type: none; text-align: center; margin: 0; padding: 0; }
     li {display: inline-block; }
-    p {font-family: 'Syncopate', sans-serif; text-transform: uppercase; font-size: 3vmax; margin: 0; color: #ccc; text-align: center; }
-    section {background: #eee; margin: 4vmin 0;}
+    p {font-family: 'Syncopate', sans-serif; text-transform: uppercase; font-size: 3em; margin: 0; color: #ccc; text-align: center; }
+    section {background: #eee; margin-top: 3em; height:2em;}
     h4 {font-family: 'Syncopate', sans-serif; margin: 0; color: #444; text-align: center; padding: .5em; text-transform: uppercase; }
     code {font-weight: normal; font-size: 1.2em; }
-    progress {background-color: #eee; border: 0; width: 100%; height: 18px; display:none; margin: 10vmin 0;}
+    progress {background-color: #eee; border: 0; width: 100%; height: 2em; display:none; margin-top: 3em;}
     progress::-webkit-progress-bar {background-color: #eee; }
     progress::-webkit-progress-value {background: #f15b47; }
     progress::-moz-progress-bar {background: #f15b47; }
+
+    @media only screen and (max-width: 1220px) {
+      input {font-size: 30em; width: 500px;}
+      p {font-size: 2.5em;}
+    }
+
+    @media only screen and (max-width: 1020px) {
+      input {font-size: 20em; width: 400px;}
+      p {font-size: 2em;}
+    }
+
+    @media only screen and (max-width: 810px) {
+      input {font-size: 15em; width: 300px;}
+      p {font-size: 1.5em;}
+    }
+
+    @media only screen and (max-width: 620px) {
+      input {font-size: 7em; width: 100px;}
+      p, h4 {font-size: 1em;}
+    }
+
+    @media only screen and (max-width: 420px) {
+      input {font-size: 4em; width: 60px;}
+      p, h4 {font-size: .8em;}
+
+    }
   </style>
 </head>
 <body>
@@ -41,8 +68,7 @@ __     __      __     _ _                                 _    _
 </ul>
 
 <section id="info">
-  <h4><code>space</code> to play / pause</h4>
-  <h4><code>esc</code> to reset</h4>
+  <h4><code>space</code> to play / pause | <code>esc</code> to reset</h4>
 </section>
 
 <progress value=0 max=100 id="progress"></progress>
