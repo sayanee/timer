@@ -4,37 +4,68 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Timer</title>
+
+  <style>
+    @import url('http://fonts.googleapis.com/css?family=Squada+One|Syncopate');
+    body {margin: 0; padding: 0; }
+    input {font-family: 'Squada One', cursive; font-size: 35vmax; border: 0; color: #f15b47; outline: none; width: 40vmax; text-align: center }
+    input:hover {background: #ececec; }
+    ul {list-style-type: none; text-align: center; padding: 0; }
+    li {display: inline-block; }
+    p {font-family: 'Syncopate', sans-serif; text-transform: uppercase; font-size: 3vmax; margin: 0; color: #ccc; text-align: center; }
+    section {background: #eee; }
+    h4 {font-family: 'Syncopate', sans-serif; margin: 0; color: #444; text-align: center; padding: .5em; text-transform: uppercase; }
+    code {font-weight: normal; font-size: 1.2em; }
+    progress {background-color: #eee; border: 0; width: 100%; height: 18px; display:none; margin: 10vmin 0;}
+    progress::-webkit-progress-bar {background-color: #eee; }
+    progress::-webkit-progress-value {background: #f15b47; }
+    progress::-moz-progress-bar {background: #f15b47; }
+  </style>
 </head>
 <body>
 
-<input type="number" min=0 max=60 id="minutes" value=00>
-<input type="number" min=0 max=60 id="seconds" value=05>
+<ul>
+  <li><input type="number" min=0 max=60 id="minutes" value=05><p>minutes</p></li>
+  <li><input type="number" min=0 max=60 id="seconds" value=00><p>seconds</p></li>
+</ul>
+
+<section id="info">
+  <h4><code>space</code> to play / pause</h4>
+  <h4><code>esc</code> to reset</h4>
+</section>
+
+<progress value=0 max=100 id="progress"></progress>
 
 <script>
 (function () {
   var play = false;
-  var intervalID
+  var intervalID;
+  var minElement = document.getElementById('minutes');
+  var secElement = document.getElementById('seconds');
+  var infoElement = document.getElementById('info');
+  var progressElement = document.getElementById('progress');
+  var minValue = sanitize(minElement.value);
+  var secValue = sanitize(secElement.value);
+  var totalSeconds = minValue*60 + secValue;
+  var currentSeconds = 0;
 
-  window.addEventListener('keydown', function(e){
-    if(e.keyCode === 32) {
-      e.preventDefault();
+  minElement.addEventListener('blur', setTimer);
+  secElement.addEventListener('blur', setTimer);
 
-      if(play) {
-        play = false;
-        clearInterval(intervalID);
-      } else {
-        var minElement = document.getElementById('minutes');
-        var secElement = document.getElementById('seconds');
+  function setTimer() {
+    minValue = sanitize(minElement.value);
+    secValue = sanitize(secElement.value);
+    totalSeconds = secValue + 60 * minValue;
+    currentSeconds = 0;
+  }
 
-        minElement.value = ("0" + Math.abs(parseInt(minElement.value,10))).slice(-2) ;
-        secElement.value = ("0" + Math.abs(parseInt(secElement.value,10))).slice(-2);
+  function sanitize(input) {
+    return Math.abs(parseInt(input, 10));
+  }
 
-        startCountdown(minElement.value, secElement.value);
-
-        play = true;
-      }
-    }
-  });
+  function make2Digits(input) {
+    return ('0' + input).slice(-2)
+  }
 
   function startCountdown(min, sec) {
      intervalID = setInterval(function() {
@@ -48,8 +79,13 @@
           return;
         }
       }
-      document.getElementById('minutes').value = ("0" + min).slice(-2);
-      document.getElementById('seconds').value = ("0" + sec).slice(-2);
+      minElement.value = ('0' + min).slice(-2);
+      secElement.value = ('0' + sec).slice(-2);
+
+
+      currentSeconds++;
+      progressElement.value = Math.ceil(currentSeconds/totalSeconds*100);
+
     }, 1000);
   }
 
@@ -57,8 +93,34 @@
     console.log('End!');
   }
 
-})();
+  window.addEventListener('keydown', function(e){
+    if(e.keyCode === 32) {
+      e.preventDefault();
 
+      if(play) {
+        play = false;
+        clearInterval(intervalID);
+      } else {
+        minElement.value = make2Digits( sanitize(minElement.value) );
+        secElement.value = make2Digits( sanitize(secElement.value) );
+
+        startCountdown(minElement.value, secElement.value);
+
+        play = true;
+        infoElement.style.display = 'none';
+        progressElement.style.display = 'block';
+      }
+    } else if(e.keyCode === 27) {
+      clearInterval(intervalID);
+      minElement.value = make2Digits(minValue);
+      secElement.value = make2Digits(secValue);
+      infoElement.style.display = 'block';
+      progressElement.style.display = 'none';
+      progressElement.value = 0;
+    }
+  });
+
+})();
 </script>
 
 </body>
