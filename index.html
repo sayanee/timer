@@ -107,7 +107,7 @@ console.log('%c Yo fellow geek!', 'background: #222; color: #bada55');
   }
 
   window.addEventListener('keydown', function(e){
-    if(e.keyCode === 32) {
+    if(e.keyCode === 32) { // when SPACE is pressed
       e.preventDefault();
 
       if(play) {
@@ -123,13 +123,14 @@ console.log('%c Yo fellow geek!', 'background: #222; color: #bada55');
         infoElement.style.display = 'none';
         progressElement.style.display = 'block';
       }
-    } else if(e.keyCode === 27) {
+    } else if(e.keyCode === 27) { // when ESC is pressed
       clearInterval(intervalID);
       minElement.value = make2Digits(minValue);
       secElement.value = make2Digits(secValue);
       infoElement.style.display = 'block';
       progressElement.style.display = 'none';
       progressElement.value = 0;
+      currentSeconds = 0;
     }
   });
 
