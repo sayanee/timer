@@ -32,32 +32,11 @@ __     __      __     _ _                                 _    _
     progress::-webkit-progress-bar {background-color: #eee; }
     progress::-webkit-progress-value {background: #f15b47; }
     progress::-moz-progress-bar {background: #f15b47; }
-
-    @media only screen and (max-width: 1220px) {
-      input {font-size: 30em; width: 500px;}
-      p {font-size: 2.5em;}
-    }
-
-    @media only screen and (max-width: 1020px) {
-      input {font-size: 20em; width: 400px;}
-      p {font-size: 2em;}
-    }
-
-    @media only screen and (max-width: 810px) {
-      input {font-size: 15em; width: 300px;}
-      p {font-size: 1.5em;}
-    }
-
-    @media only screen and (max-width: 620px) {
-      input {font-size: 7em; width: 100px;}
-      p, h4 {font-size: 1em;}
-    }
-
-    @media only screen and (max-width: 420px) {
-      input {font-size: 4em; width: 60px;}
-      p, h4 {font-size: .8em;}
-
-    }
+    @media only screen and (max-width: 1220px) {input {font-size: 30em; width: 500px;} p {font-size: 2.5em;} }
+    @media only screen and (max-width: 1020px) {input {font-size: 20em; width: 400px;} p {font-size: 2em;} }
+    @media only screen and (max-width: 810px) {input {font-size: 15em; width: 300px;} p {font-size: 1.5em;} }
+    @media only screen and (max-width: 620px) {input {font-size: 7em; width: 100px;} p, h4 {font-size: 1em;} }
+    @media only screen and (max-width: 420px) {input {font-size: 4em; width: 60px;} p, h4 {font-size: .8em;} }
   </style>
 </head>
 <body>
@@ -75,7 +54,7 @@ __     __      __     _ _                                 _    _
 <progress value=0 max=100 id="progress"></progress>
 
 <script>
-console.log('%c Yo fellow geek!', 'background: #222; color: #bada55');
+console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff');
 
 (function () {
   var play = false;
@@ -132,7 +111,8 @@ console.log('%c Yo fellow geek!', 'background: #222; color: #bada55');
   }
 
   function endCountdown() {
-    console.log('End!');
+    infoElement.style.display = 'block';
+    progressElement.style.display = 'none';
   }
 
   function togglePausePlay() {
@@ -180,17 +160,14 @@ console.log('%c Yo fellow geek!', 'background: #222; color: #bada55');
     if(e.srcElement.tagName !== 'INPUT') {
       if(!singleTap) {
         singleTap = true;
-        console.log('setting singleTap true');
         var timerID = setTimeout(function() {
           singleTap = false;
-          console.log('400ms elapsed');
           if(doubleTap) resetTimer();
           else togglePausePlay();
           doubleTap = false;
         }, 400);
       } else {
         doubleTap = true;
-        console.log('doubleTap true');
       }
     }
 
