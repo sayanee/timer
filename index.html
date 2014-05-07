@@ -19,11 +19,12 @@ __     __      __     _ _                                 _    _
   <style>
     @import url('http://fonts.googleapis.com/css?family=Squada+One|Syncopate');
     html, body {margin: 0; padding: 0;}
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none; margin: 0; }
-    input {font-family: 'Squada One', cursive; font-size: 35em; border: 0; color: #f15b47; outline: none; width: 600px; text-align: center }
+    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none; margin: 0; }
+    input {font-family: 'Squada One', sans-serif; font-size: 35em; border: 0; color: #f15b47; outline: none; width: 600px; text-align: center }
     ul {list-style-type: none; text-align: center; margin: 0; padding: 0; }
-    li {display: inline-block; }
+    li {display: inline-block; position: relative;}
+    li:before {content: 'click to edit time'; position: absolute; font-family: 'Syncopate', sans-serif; top: 1em; left: 0; text-align: center; background: #eee; padding: .5em; border-radius: .5em; color: #444; display: none; width: 95%; }
+    li:hover:before {display: block; }
     p {font-family: 'Syncopate', sans-serif; text-transform: uppercase; font-size: 3em; margin: 0; color: #ccc; text-align: center; }
     section {background: #eee; margin-top: 1em; }
     h4 {font-family: 'Syncopate', sans-serif; margin: 0; color: #444; text-align: center; padding: .5em; line-height: 2em;}
@@ -35,7 +36,7 @@ __     __      __     _ _                                 _    _
     @media only screen and (max-width: 1220px) {input {font-size: 30em; width: 500px;} p {font-size: 2.5em;} }
     @media only screen and (max-width: 1020px) {input {font-size: 20em; width: 400px;} p {font-size: 2em;} }
     @media only screen and (max-width: 810px) {input {font-size: 15em; width: 300px;} p {font-size: 1.5em;} }
-    @media only screen and (max-width: 620px) {input {font-size: 7em; width: 100px;} p, h4 {font-size: 1em;} }
+    @media only screen and (max-width: 620px) {input {font-size: 7em; width: 100px;} p, h4 {font-size: 1em;} li:before {font-size: .2em; content: 'click to edit';}}
     @media only screen and (max-width: 420px) {input {font-size: 4em; width: 60px;} p, h4 {font-size: .8em;} }
   </style>
 </head>
