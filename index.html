@@ -38,126 +38,123 @@
 <progress value=0 max=100 id="progress"></progress>
 
 <script>
-console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff');
+console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff')
 
-(function () {
-  var play = false;
-  var intervalID;
-  var minElement = document.getElementById('minutes');
-  var secElement = document.getElementById('seconds');
-  var infoElement = document.getElementById('info');
-  var progressElement = document.getElementById('progress');
-  var minValue = sanitize(minElement.value);
-  var secValue = sanitize(secElement.value);
-  var totalSeconds = minValue*60 + secValue;
-  var currentSeconds = 0;
-  var singleTap = false;
-  var doubleTap = false;
+;(function () {
+  var play = false
+  var intervalID
+  var minElement = document.getElementById('minutes')
+  var secElement = document.getElementById('seconds')
+  var infoElement = document.getElementById('info')
+  var progressElement = document.getElementById('progress')
+  var minValue = sanitize(minElement.value)
+  var secValue = sanitize(secElement.value)
+  var totalSeconds = minValue * 60 + secValue
+  var currentSeconds = 0
+  var singleTap = false
+  var doubleTap = false
 
-  minElement.addEventListener('blur', setTimer);
-  secElement.addEventListener('blur', setTimer);
+  minElement.addEventListener('blur', setTimer)
+  secElement.addEventListener('blur', setTimer)
 
-  function setTimer() {
-    minValue = sanitize(minElement.value);
-    secValue = sanitize(secElement.value);
-    totalSeconds = secValue + 60 * minValue;
-    currentSeconds = 0;
+  function setTimer () {
+    minValue = sanitize(minElement.value)
+    secValue = sanitize(secElement.value)
+    totalSeconds = secValue + 60 * minValue
+    currentSeconds = 0
   }
 
-  function sanitize(input) {
-    return Math.abs(parseInt(input, 10));
+  function sanitize (input) {
+    return Math.abs(parseInt(input, 10))
   }
 
-  function make2Digits(input) {
+  function make2Digits (input) {
     return ('0' + input).slice(-2)
   }
 
-  function startCountdown(min, sec) {
-     intervalID = setInterval(function() {
+  function startCountdown (min, sec) {
+    intervalID = setInterval(function () {
+      if (--sec < 0) {
+        sec += 60
 
-      if(--sec < 0) {
-        sec += 60;
-
-        if(--min < 0) {
-          endCountdown();
-          clearInterval(intervalID);
-          return;
+        if (--min < 0) {
+          endCountdown()
+          clearInterval(intervalID)
+          return
         }
       }
-      minElement.value = ('0' + min).slice(-2);
-      secElement.value = ('0' + sec).slice(-2);
+      minElement.value = ('0' + min).slice(-2)
+      secElement.value = ('0' + sec).slice(-2)
 
+      currentSeconds++
+      progressElement.value = Math.ceil(currentSeconds / totalSeconds * 100)
 
-      currentSeconds++;
-      progressElement.value = Math.ceil(currentSeconds/totalSeconds*100);
-
-    }, 1000);
+    }, 1000)
   }
 
-  function endCountdown() {
-    infoElement.style.display = 'block';
-    progressElement.style.display = 'none';
+  function endCountdown () {
+    infoElement.style.display = 'block'
+    progressElement.style.display = 'none'
   }
 
-  function togglePausePlay() {
-    if(play) {
-      play = false;
-      clearInterval(intervalID);
+  function togglePausePlay () {
+    if (play) {
+      play = false
+      clearInterval(intervalID)
     } else {
-      minElement.value = make2Digits( sanitize(minElement.value) );
-      secElement.value = make2Digits( sanitize(secElement.value) );
-      startCountdown(minElement.value, secElement.value);
-      play = true;
-      infoElement.style.display = 'none';
-      progressElement.style.display = 'block';
+      minElement.value = make2Digits(sanitize(minElement.value))
+      secElement.value = make2Digits(sanitize(secElement.value))
+      startCountdown(minElement.value, secElement.value)
+      play = true
+      infoElement.style.display = 'none'
+      progressElement.style.display = 'block'
     }
   }
 
-  function resetTimer() {
-    clearInterval(intervalID);
-    minElement.value = make2Digits(minValue);
-    secElement.value = make2Digits(secValue);
-    infoElement.style.display = 'block';
-    progressElement.style.display = 'none';
-    progressElement.value = 0;
-    currentSeconds = 0;
+  function resetTimer () {
+    clearInterval(intervalID)
+    minElement.value = make2Digits(minValue)
+    secElement.value = make2Digits(secValue)
+    infoElement.style.display = 'block'
+    progressElement.style.display = 'none'
+    progressElement.value = 0
+    currentSeconds = 0
   }
 
-  window.addEventListener('keydown', function(e){
-    if(e.keyCode === 32) { // when SPACE is pressed
-      e.preventDefault();
-      togglePausePlay();
-    } else if(e.keyCode === 27) { // when ESC is pressed
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode === 32) { // when SPACE is pressed
+      e.preventDefault()
+      togglePausePlay()
+    } else if (e.keyCode === 27) { // when ESC is pressed
       resetTimer()
     }
-  });
+  })
 
-  window.addEventListener('click', function(e){
-    if(e.toElement.tagName !== 'INPUT') togglePausePlay();
-  });
+  window.addEventListener('click', function (e) {
+    if (e.toElement.tagName !== 'INPUT') togglePausePlay()
+  })
 
-  window.addEventListener('dblclick', function(e){
-    if(e.toElement.tagName !== 'INPUT') resetTimer();
-  });
+  window.addEventListener('dblclick', function (e) {
+    if (e.toElement.tagName !== 'INPUT') resetTimer()
+  })
 
-  window.addEventListener('touchend', function(e){
-    if(e.srcElement.tagName !== 'INPUT') {
-      if(!singleTap) {
-        singleTap = true;
-        var timerID = setTimeout(function() {
-          singleTap = false;
-          if(doubleTap) resetTimer();
-          else togglePausePlay();
-          doubleTap = false;
-        }, 400);
+  window.addEventListener('touchend', function (e) {
+    if (e.srcElement.tagName !== 'INPUT') {
+      if (!singleTap) {
+        singleTap = true
+        var timerID = setTimeout(function () {
+          singleTap = false
+          if (doubleTap) resetTimer()
+          else togglePausePlay()
+          doubleTap = false
+        }, 400)
       } else {
-        doubleTap = true;
+        doubleTap = true
       }
     }
 
-  });
-
-})();
+  })
+})()
 </script>
 
 </body>
