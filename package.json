@@ -1,0 +1,29 @@
+{
+  "name": "timer",
+  "version": "1.0.0",
+  "description": "simple countdown timer for developer meetups / speaking events",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo It is all good and simple!",
+    "start": "http-server ./ -p 8888"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sayanee/timer.git"
+  },
+  "keywords": [
+    "timer",
+    "clock",
+    "countdown",
+    "simple"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sayanee/timer/issues"
+  },
+  "homepage": "https://github.com/sayanee/timer#readme",
+  "devDependencies": {
+    "http-server": "^0.8.5"
+  }
+}
