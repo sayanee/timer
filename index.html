@@ -9,14 +9,13 @@
   <style>
     @import url('http://fonts.googleapis.com/css?family=Squada+One|Syncopate');
     html, body {margin: 0; padding: 0;}
+    section {background: #eee; margin-top: 1em; }
+    h2 {font-family: 'Squada One', sans-serif; font-size: 40vw; border: 0; color: #f15b47; outline: none; text-align: center; width: 100%; width: 100%; margin: 0; padding: 0;}
+    h4 {font-size: .8em; font-family: 'Syncopate', sans-serif; margin: 0; color: #444; text-align: center; padding: .5em; line-height: 2em;}
+    p {font-family: 'Syncopate', sans-serif; text-transform: uppercase; font-size: 3vw; margin: 0; color: #ccc; text-align: center; }
     ul {list-style-type: none; text-align: center; margin: 0; padding: 0; overflow: hidden;}
     li {display: inline-block; vertical-align: top; position: relative; width: 45vw; margin: 0 2vw;}
-    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {-webkit-appearance: none; margin: 0; padding: 0;}
-    input {font-family: 'Squada One', sans-serif; font-size: 40vw; border: 0; color: #f15b47; outline: none; text-align: center; width: 100%; width: 100%; margin: 0; padding: 0;}
-    p {font-family: 'Syncopate', sans-serif; text-transform: uppercase; font-size: 3vw; margin: 0; color: #ccc; text-align: center; }
-    section {background: #eee; margin-top: 1em; }
-    h4 {font-size: .8em; font-family: 'Syncopate', sans-serif; margin: 0; color: #444; text-align: center; padding: .5em; line-height: 2em;}
-    code {font-weight: normal; font-size: 1.2em; border: 1px solid #999; border-radius: .3em; padding: .2em;}
+    code {font-weight: normal; font-size: 1.2em; border: 1px solid #999; border-radius: .3em; padding: .2em .5em;}
     progress {background-color: #eee; border: 0; width: 100%; height: 2em; display:none; margin-top: 1em;}
     progress::-webkit-progress-bar {background-color: #eee; }
     progress::-webkit-progress-value {background: #f15b47; }
@@ -26,11 +25,12 @@
 <body>
 
 <ul>
-  <li><input type="number" min=0 max=60 id="minutes" value=05 disabled><p>minutes</p></li>
-  <li><input type="number" min=0 max=60 id="seconds" value=00 disabled><p>seconds</p></li>
+  <li><h2 class="clock" id="minutes">05</h2><p>minutes</p></li>
+  <li><h2 class="clock" id="seconds">00</h2><p>seconds</p></li>
 </ul>
 
 <section id="info">
+  <h4><code>1</code> / <code>2</code> / <code>3</code> / <code>4</code> / <code>5</code> / <code>6</code> / <code>7</code> / <code>8</code> / <code>9</code> / <code>0</code> /  to edit time</h4>
   <h4><code>spacebar</code> / <code>click</code> / <code>tap</code> to play / pause</h4>
   <h4><code>esc</code> / <code>double click</code> / <code>double touch</code> to reset</h4>
 </section>
@@ -38,7 +38,7 @@
 <progress value=0 max=100 id="progress"></progress>
 
 <script>
-console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff')
+console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
 
 ;(function () {
   var play = false
@@ -47,19 +47,48 @@ console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff')
   var secElement = document.getElementById('seconds')
   var infoElement = document.getElementById('info')
   var progressElement = document.getElementById('progress')
-  var minValue = sanitize(minElement.value)
-  var secValue = sanitize(secElement.value)
+  var minValue = sanitize(minElement.innerHTML)
+  var secValue = sanitize(secElement.innerHTML)
+  var minSecValues = [ 0, 5, 0, 0 ]
+  var minSecValueCount = 0
   var totalSeconds = minValue * 60 + secValue
   var currentSeconds = 0
   var singleTap = false
   var doubleTap = false
+  var configAscii = {
+    '48': '0',
+    '49': 1,
+    '50': 2,
+    '51': 3,
+    '52': 4,
+    '53': 5,
+    '54': 6,
+    '55': 7,
+    '56': 8,
+    '57': 9
+  }
 
   minElement.addEventListener('blur', setTimer)
   secElement.addEventListener('blur', setTimer)
 
+  function setMinSecValues (pressedValue) {
+    if (!pressedValue) return
+    if (play) return
+
+    minSecValues[ 0 ] = minSecValues[ 1 ]
+    minSecValues[ 1 ] = minSecValues[ 2 ]
+    minSecValues[ 2 ] = minSecValues[ 3 ]
+    minSecValues[ 3 ] = pressedValue
+
+    minElement.innerHTML = minSecValues[ 0 ] + '' + minSecValues[ 1 ]
+    secElement.innerHTML = minSecValues[ 2 ] + '' + minSecValues[ 3 ]
+    setTimer ()
+    minSecValueCount = (minSecValueCount + 1) % 4
+  }
+
   function setTimer () {
-    minValue = sanitize(minElement.value)
-    secValue = sanitize(secElement.value)
+    minValue = sanitize(minElement.innerHTML)
+    secValue = sanitize(secElement.innerHTML)
     totalSeconds = secValue + 60 * minValue
     currentSeconds = 0
   }
@@ -83,8 +112,8 @@ console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff')
           return
         }
       }
-      minElement.value = ('0' + min).slice(-2)
-      secElement.value = ('0' + sec).slice(-2)
+      minElement.innerHTML = ('0' + min).slice(-2)
+      secElement.innerHTML = ('0' + sec).slice(-2)
 
       currentSeconds++
       progressElement.value = Math.ceil(currentSeconds / totalSeconds * 100)
@@ -102,9 +131,9 @@ console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff')
       play = false
       clearInterval(intervalID)
     } else {
-      minElement.value = make2Digits(sanitize(minElement.value))
-      secElement.value = make2Digits(sanitize(secElement.value))
-      startCountdown(minElement.value, secElement.value)
+      minElement.innerHTML = make2Digits(sanitize(minElement.innerHTML))
+      secElement.innerHTML = make2Digits(sanitize(secElement.innerHTML))
+      startCountdown(minElement.innerHTML, secElement.innerHTML)
       play = true
       infoElement.style.display = 'none'
       progressElement.style.display = 'block'
@@ -113,46 +142,47 @@ console.log('%c Yo fellow geek!', 'background: #f15b47; color: #fff')
 
   function resetTimer () {
     clearInterval(intervalID)
-    minElement.value = make2Digits(minValue)
-    secElement.value = make2Digits(secValue)
+    minElement.innerHTML = make2Digits(minValue)
+    secElement.innerHTML = make2Digits(secValue)
     infoElement.style.display = 'block'
     progressElement.style.display = 'none'
     progressElement.value = 0
     currentSeconds = 0
   }
 
+  setMinSecValues()
+
   window.addEventListener('keydown', function (e) {
-    if (e.keyCode === 32) { // when SPACE is pressed
+    if (e.keyCode === 32) { // ASCII 32 is space
       e.preventDefault()
-      togglePausePlay()
-    } else if (e.keyCode === 27) { // when ESC is pressed
-      resetTimer()
+      return togglePausePlay()
+    } else if (e.keyCode === 27) { // ASCII 27 is escape
+      return resetTimer()
+    } else if (e.keyCode > 47 && e.keyCode < 58) { // ASCII value is a number
+      return setMinSecValues(configAscii[ e.keyCode ])
     }
   })
 
   window.addEventListener('click', function (e) {
-    if (e.toElement.tagName !== 'INPUT') togglePausePlay()
+    togglePausePlay()
   })
 
   window.addEventListener('dblclick', function (e) {
-    if (e.toElement.tagName !== 'INPUT') resetTimer()
+    resetTimer()
   })
 
   window.addEventListener('touchend', function (e) {
-    if (e.srcElement.tagName !== 'INPUT') {
-      if (!singleTap) {
-        singleTap = true
-        var timerID = setTimeout(function () {
-          singleTap = false
-          if (doubleTap) resetTimer()
-          else togglePausePlay()
-          doubleTap = false
-        }, 400)
-      } else {
-        doubleTap = true
-      }
+    if (!singleTap) {
+      singleTap = true
+      var timerID = setTimeout(function () {
+        singleTap = false
+        if (doubleTap) resetTimer()
+        else togglePausePlay()
+        doubleTap = false
+      }, 400)
+    } else {
+      doubleTap = true
     }
-
   })
 })()
 </script>
