@@ -10,7 +10,7 @@
     @import url('http://fonts.googleapis.com/css?family=Squada+One|Syncopate');
     html, body {margin: 0; padding: 0;}
     section {background: #eee; margin-top: 1em; }
-    h2 {font-family: 'Squada One', sans-serif; font-size: 40vw; border: 0; color: #f15b47; outline: none; text-align: center; width: 100%; width: 100%; margin: 0; padding: 0;}
+    h2 {font-family: 'Squada One', sans-serif; font-size: 40vw; border: 0; outline: none; text-align: center; width: 100%; width: 100%; margin: 0; padding: 0;}
     h4 {font-size: .8em; font-family: 'Syncopate', sans-serif; margin: 0; color: #444; text-align: center; padding: .5em; line-height: 2em;}
     p {font-family: 'Syncopate', sans-serif; text-transform: uppercase; font-size: 3vw; margin: 0; color: #ccc; text-align: center; }
     ul {list-style-type: none; text-align: center; margin: 0; padding: 0; overflow: hidden;}
@@ -20,19 +20,32 @@
     progress::-webkit-progress-bar {background-color: #eee; }
     progress::-webkit-progress-value {background: #f15b47; }
     progress::-moz-progress-bar {background: #f15b47; }
+    .info {color: #f15b47; }
+    .mute {color: #eee;}
+    .input{width: 50px; text-align: center;}
+    .hidden{display: none;}
   </style>
 </head>
 <body>
 
 <ul>
-  <li><h2 class="clock" id="minutes">05</h2><p>minutes</p></li>
-  <li><h2 class="clock" id="seconds">00</h2><p>seconds</p></li>
+  <li><h2 class="clock info" id="minutes">05</h2><p>minutes</p></li>
+  <li><h2 class="clock info" id="seconds">00</h2><p>seconds</p></li>
 </ul>
 
 <section id="info">
-  <h4><code>1</code> / <code>2</code> / <code>3</code> / <code>4</code> / <code>5</code> / <code>6</code> / <code>7</code> / <code>8</code> / <code>9</code> / <code>0</code> /  to edit time</h4>
-  <h4><code>spacebar</code> / <code>click</code> / <code>tap</code> to play / pause</h4>
-  <h4><code>esc</code> / <code>double click</code> / <code>double touch</code> to reset</h4>
+  <h4 id="edit">
+    <code>1</code> / <code>2</code> / <code>3</code> / <code>4</code> / <code>5</code> / <code>6</code> / <code>7</code> / <code>8</code> / <code>9</code> / <code>0</code> /  to edit time</h4>
+  <h4>
+    <span id="info-space"><code>spacebar</code> / <code>click</code></span>
+    <span id="info-tap" class="hidden"><code>tap</code></span>
+    to play / pause
+  </h4>
+  <h4>
+    <span id="info-esc"><code>esc</code> / <code>double click</code></span>
+    <span id="info-2tap" class="hidden"><code>double tap</code></span>
+    to reset
+  </h4>
 </section>
 
 <progress value=0 max=100 id="progress"></progress>
@@ -83,7 +96,12 @@ console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
     minElement.innerHTML = minSecValues[ 0 ] + '' + minSecValues[ 1 ]
     secElement.innerHTML = minSecValues[ 2 ] + '' + minSecValues[ 3 ]
     setTimer ()
+    setColors(minSecValueCount)
     minSecValueCount = (minSecValueCount + 1) % 4
+  }
+
+  function setColors (count) {
+    return count < 2 ? minElement.className = 'clock mute' : minElement.className = 'clock info'
   }
 
   function setTimer () {
@@ -150,7 +168,33 @@ console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
     currentSeconds = 0
   }
 
+  function is_touch_device() {
+    try {
+      document.createEvent('TouchEvent');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setIntructions() {
+    if (is_touch_device()) {
+      var className = 'hidden'
+      var nilClass = ''
+
+      document.getElementById('info-space').className = className
+      document.getElementById('info-esc').className = className
+      document.getElementById('info-tap').className = nilClass
+      document.getElementById('info-2tap').className = nilClass
+    }
+  }
+
+  if (is_touch_device()) {
+    document.getElementById('edit').innerHTML = '<input type="number" placeholder="0500" class="input"> edit time'
+  }
+
   setMinSecValues()
+  setIntructions()
 
   window.addEventListener('keydown', function (e) {
     if (e.keyCode === 32) { // ASCII 32 is space
@@ -164,7 +208,7 @@ console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
   })
 
   window.addEventListener('click', function (e) {
-    togglePausePlay()
+    if (e.toElement.tagName !== 'INPUT') togglePausePlay();
   })
 
   window.addEventListener('dblclick', function (e) {
@@ -172,16 +216,18 @@ console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
   })
 
   window.addEventListener('touchend', function (e) {
-    if (!singleTap) {
-      singleTap = true
-      var timerID = setTimeout(function () {
-        singleTap = false
-        if (doubleTap) resetTimer()
-        else togglePausePlay()
-        doubleTap = false
-      }, 400)
-    } else {
-      doubleTap = true
+    if (e.srcElement.tagName !== 'INPUT') {
+      if (!singleTap) {
+        singleTap = true
+        var timerID = setTimeout(function () {
+          singleTap = false
+          if (doubleTap) resetTimer()
+          else togglePausePlay()
+          doubleTap = false
+        }, 400)
+      } else {
+        doubleTap = true
+      }
     }
   })
 })()
