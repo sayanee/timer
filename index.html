@@ -50,6 +50,8 @@
 
 <progress value=0 max=100 id="progress"></progress>
 
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/screenfull.js/3.0.0/screenfull.js"></script>
 <script>
 console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
 
@@ -148,6 +150,7 @@ console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
     if (play) {
       play = false
       clearInterval(intervalID)
+      if (screenfull.enabled) screenfull.exit()
     } else {
       minElement.innerHTML = make2Digits(sanitize(minElement.innerHTML))
       secElement.innerHTML = make2Digits(sanitize(secElement.innerHTML))
@@ -155,6 +158,7 @@ console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
       play = true
       infoElement.style.display = 'none'
       progressElement.style.display = 'block'
+      if (screenfull.enabled) screenfull.request()
     }
   }
 
