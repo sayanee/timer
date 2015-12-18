@@ -1,11 +1,11 @@
-#timer
+#timer [![Build Status](https://travis-ci.org/sayanee/timer.svg)](https://travis-ci.org/sayanee/timer)
 
-> speaker countdown timer for any event organizer - works on non-touch-enabled/touch-enabled devices!
+> speaker countdown timer for any event organizer for laptop / mobile
 
-##install
+### install
 
 - open the file `index.html` in your browser
 
-##license
+### license
 
 [MIT license](/LICENSE)
