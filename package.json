@@ -4,7 +4,7 @@
   "description": "simple countdown timer for developer meetups / speaking events",
   "main": "index.html",
   "scripts": {
-    "test": "echo It is all good and simple!",
+    "test": "standard index.js",
     "start": "http-server ./ -p 8888"
   },
   "repository": {
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/sayanee/timer#readme",
   "devDependencies": {
-    "http-server": "^0.8.5"
+    "http-server": "^0.8.5",
+    "standard": "^5.4.1"
   }
 }

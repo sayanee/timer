@@ -4,8 +4,7 @@
 
 ##install
 
-- View on [website](http://sayan.ee/timer) *OR*
-- download and open the file `index.html` in your browser - just `6kb` in size
+- open the file `index.html` in your browser
 
 ##license
 
