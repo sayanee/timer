@@ -2,12 +2,6 @@
 (function () {
   ;console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
 
-  if ('addEventListener' in document) {
-    document.addEventListener('DOMContentLoaded', function () {
-      FastClick.attach(document.body)
-    }, false)
-  }
-
   var play = false
   var intervalID
   var minElement = document.getElementById('minutes')
@@ -144,18 +138,24 @@
     }
   }
 
-  if (is_touch_device()) {
-    document.getElementById('edit').innerHTML = '<input type="number" placeholder="0500" class="input"> edit time'
-  }
-
   setMinSecValues()
   setIntructions()
+
+  if (is_touch_device()) {
+    document.getElementById('edit').innerHTML = '<input type="number" placeholder="0500" class="input"> edit time'
+
+    if ('addEventListener' in document) {
+      document.addEventListener('DOMContentLoaded', function () {
+        FastClick.attach(document.body)
+      }, false)
+    }
+  }
 
   window.addEventListener('keydown', function (e) {
     if (e.keyCode === 32) { // ASCII 32 is space
       e.preventDefault()
       return togglePausePlay()
-    } else if (e.keyCode === 27) { // ASCII 27 is escape
+    } else if (e.keyCode === 27 || e.keyCode === 13) { // ASCII 27, 13 is escape, enter
       return resetTimer()
     } else if (e.keyCode > 47 && e.keyCode < 58) { // ASCII value is a number
       return setMinSecValues(configAscii[ e.keyCode ])
@@ -170,10 +170,6 @@
     if (e.target && e.target.tagName !== 'INPUT') {
       return togglePausePlay()
     }
-  })
-
-  window.addEventListener('dblclick', function (e) {
-    resetTimer()
   })
 
   window.addEventListener('touchend', function (e) {
