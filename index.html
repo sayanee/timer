@@ -212,7 +212,13 @@ console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
   })
 
   window.addEventListener('click', function (e) {
-    if (e.toElement.tagName !== 'INPUT') togglePausePlay();
+    if (e.toElement && e.toElement.tagName !== 'INPUT') {
+      return togglePausePlay()
+    }
+
+    if (e.target && e.target.tagName !== 'INPUT') {
+      return togglePausePlay()
+    }
   })
 
   window.addEventListener('dblclick', function (e) {
