@@ -52,10 +52,17 @@
 
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/screenfull.js/3.0.0/screenfull.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
 <script>
 console.log('%c happy timing ;-)', 'background: #f15b47; color: #fff')
 
 ;(function () {
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+      FastClick.attach(document.body)
+    }, false)
+  }
+
   var play = false
   var intervalID
   var minElement = document.getElementById('minutes')
